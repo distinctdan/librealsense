@@ -1,5 +1,7 @@
 package com.intel.realsense.librealsense;
 
+import static androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import androidx.core.content.ContextCompat;
 
 /**
  * <h1>Enumerator</h1>
@@ -64,9 +67,9 @@ class Enumerator {
         mListener = listener;
         mContext = context;
 
-        context.registerReceiver(mBroadcastReceiver, new IntentFilter(UsbUtilities.ACTION_USB_PERMISSION));
-        context.registerReceiver(mBroadcastReceiver, new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED));
-        context.registerReceiver(mBroadcastReceiver, new IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED));
+        ContextCompat.registerReceiver(context, mBroadcastReceiver, new IntentFilter(UsbUtilities.ACTION_USB_PERMISSION), RECEIVER_NOT_EXPORTED);
+        ContextCompat.registerReceiver(context, mBroadcastReceiver, new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED), RECEIVER_NOT_EXPORTED);
+        ContextCompat.registerReceiver(context, mBroadcastReceiver, new IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED), RECEIVER_NOT_EXPORTED);
 
         onDeviceAttach(context);
     }

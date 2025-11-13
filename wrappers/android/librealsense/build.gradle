@@ -1,6 +1,10 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
+
+group = "com.intel.realsense.librealsense"
+version = "2.56.5"
 
 android {
     namespace 'com.intel.realsense.librealsense'
@@ -31,11 +35,54 @@ android {
             path "CMakeLists.txt"
         }
     }
+
+    // How to Rename the output AAR file:
+    //      - https://stackoverflow.com/questions/24728591/how-to-set-name-of-aar-output-from-gradle
+    // Note that 'defaultConfig' references the above closure with that name
+    // And rootProject.name is defined in settings.gradle
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            // Do not add Variant (buildType) Name at the end
+            outputFileName = "${rootProject.name}-${defaultConfig.versionName}.aar"
+        }
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = group
+            artifactId = rootProject.name
+            version = version
+
+            afterEvaluate {
+                from components.findByName("release")
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "<your repository>"
+            url = "<your repository url>"
+            credentials {
+                username = "<username>"
+                password = "<password>"
+            }
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.core:core:1.17.0"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidextjunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
