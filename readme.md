@@ -1,3 +1,14 @@
+# Fork Notes
+
+Fixes android build by upgrading the gradle and android gradle plugin versions. To build `librealsense.aar`, follow these steps:
+ - Check out the appropriate branch following the below version/branch mapping.
+ - Follow directions here to build the .aar https://github.com/distinctdan/librealsense/tree/master/wrappers/android
+
+Version/Branch mapping:
+ - `v2.56.5` uses branch `v2.56.5_fix-android`
+
+-----------------
+
 <p align="center"><img src="doc/img/realsense.png" width="70%" /><br><br></p>
 
 -----------------
